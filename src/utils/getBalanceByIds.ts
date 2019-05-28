@@ -1,18 +1,18 @@
 import { getAccountByIds } from './getAccountByIds';
 import { DCoreApi } from 'dcorejs-sdk';
 
-export interface CustomAccountInfo {
+export interface AccountInfo {
   id: string;
   name: string;
   registrar: string;
   balance: number;
 }
 
-export const getBalanceByAccountIds = async (
+export const getBalanceByIds = async (
   api: DCoreApi,
   ids: string[],
   assetSymbol: string,
-): Promise<CustomAccountInfo[]> => {
+): Promise<AccountInfo[]> => {
   const accounts = await getAccountByIds(api, ids);
 
   const getBalancePromises = accounts.map(account =>

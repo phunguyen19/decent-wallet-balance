@@ -9,18 +9,19 @@
     "watch": "ts-node-dev --inspect=0.0.0.0:1234 -r dotenv-safe/config src/index.ts",
     "lint": "tslint -p tsconfig.json -c tslint.json",
     "build": "tsc",
-    "clean:dist": "rimraf dist/",
+    "prebuild": "rimraf dist/",
     "start": "ts-node src/",
     "start:dist": "node dist/",
     "start:recursive": "ts-node src/recursiveGetAccount.ts",
     "start:loop": "ts-node src/loopGetAccount.ts"
   },
+  "bin": {
+    "decent-list-wallets": "./dist/index.js"
+  },
   "pre-commit": [
     "pre-commit-msg",
     "lint",
-    "clean:dist",
-    "build",
-    "clean:dist"
+    "build"
   ],
   "keywords": [],
   "author": "",
@@ -37,6 +38,8 @@
   },
   "dependencies": {
     "@types/ws": "^6.0.1",
+    "columnify": "^1.5.4",
+    "commander": "^2.20.0",
     "dcorejs-sdk": "^2.5.3",
     "decimal.js": "^10.2.0",
     "dotenv-safe": "^6.1.0",

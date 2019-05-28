@@ -14,28 +14,51 @@ import { AccountInfo, getBalanceByIds } from './utils/getBalanceByIds';
 import { logger } from './utils/logger';
 
 program
-  .version('0.1.0', '-v, --version')
-  .option('-o, --output <output>', 'Output csv file name')
   .option(
-    '-c, --concurrent [concurrent]',
-    'Number of max concurrent requests to blockchain',
+    '-o, --output <string>',
+    '(required) Output csv file name. E.g result.csv',
+  )
+  .option(
+    '-a, --asset [string]',
+    '(required) Asset symbol to get the balance. E.g: ALX',
+  )
+  .option(
+    '-l, --limit-output [number]',
+    '(optional) Top list of accounts. E.g: 20',
+    -1,
+  )
+  .option(
+    '-c, --concurrent [number]',
+    '(optional) Number of max concurrent requests to blockchain. E.g: 500',
     1000,
   )
-  .option('-a, --asset [asset]', 'Asset symbol to get the balance', 'ALX')
   .option(
-    '-w, --websocket [websocket]',
-    'Websocket uri to blockchain. Default: wss://socket.decentgo.com:8090',
+    '-w, --websocket [string]',
+    '(optional) Websocket uri to blockchain. Default: wss://socket.decentgo.com:8090',
     'wss://socket.decentgo.com:8090',
   )
+  .version('0.1.0', '-v, --version')
   .parse(process.argv);
 
+let isError = false;
+
 if (!program.output) {
-  logger.error('No output file provided. Please use --help to see how to use.');
-  process.exit(1);
+  logger.error('--output is required');
+  isError = true;
+}
+
+if (!program.output) {
+  logger.error('--asset is required');
+  isError = true;
+}
+
+if (isError) {
+  program.help();
 }
 
 const config = {
   assetSymbol: String(program.asset).toUpperCase(),
+  limitOutput: +program.limitOutput,
   blockchainSocketUrl: program.websocket,
   csvOutputFile: resolve(program.output),
   concurrent: +program.concurrent,
@@ -53,7 +76,7 @@ const api = DCoreSdk.createForWebSocket(
 const loopGetAccounts = async () => {
   const totalAccount = (await api.accountApi.countAll().toPromise()).toNumber();
 
-  logger.info(`Total accounts ${totalAccount}`);
+  logger.info(`Start analyzing ${totalAccount} accounts ...`);
 
   let totalList: AccountInfo[] = [];
   let ids: string[];
@@ -67,10 +90,12 @@ const loopGetAccounts = async () => {
     const accounts = await getBalanceByIds(api, ids, config.assetSymbol);
 
     totalList = totalList.concat(
-      accounts.filter(account => account.balance !== null),
+      accounts.filter(
+        account => account.name !== null && account.balance !== null,
+      ),
     );
 
-    logger.info(`Got ${totalList.length} accounts`);
+    logger.info(`Analyzed ${totalList.length} accounts`);
   }
 
   if (!fs.existsSync(dirname(config.csvOutputFile))) {
@@ -80,9 +105,16 @@ const loopGetAccounts = async () => {
   fs.writeFileSync(config.csvOutputFile, 'id,name,registrar,balance,asset');
 
   totalList
-    .sort((prevEl, nextEl) => nextEl.balance - prevEl.balance)
-    .map((account, index) => {
-      const balance = new Decimal(account.balance).toFixed(8);
+    .sort((prevEl, nextEl) => nextEl.balance.amount - prevEl.balance.amount)
+    .some((account, index) => {
+      if (config.limitOutput > 0 && index > config.limitOutput) {
+        return true;
+      }
+
+      const balance = new Decimal(account.balance.amount).toFixed(
+        account.balance.precision,
+      );
+
       const row = [
         account.id,
         account.name,
@@ -90,8 +122,11 @@ const loopGetAccounts = async () => {
         balance,
         config.assetSymbol,
       ].join(',');
+
       fs.appendFileSync(config.csvOutputFile, `\n${row}`);
     });
+
+  logger.info(`Done. Output file: ${config.csvOutputFile}`);
 
   process.exit(0);
 };

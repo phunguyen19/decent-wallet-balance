@@ -13,11 +13,11 @@ npm link
 ## Usage
 
 ```
-decent-list-wallet --output result.csv --asset ALX
+decent-wallet-balance --output result.csv --asset ALX
 ```
 
-Full options and get help
+Full options and help
 
 ```
-decent-list-wallet --help
+decent-wallet-balance --help
 ```

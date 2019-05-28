@@ -5,7 +5,10 @@ export interface AccountInfo {
   id: string;
   name: string;
   registrar: string;
-  balance: number;
+  balance: {
+    amount: number;
+    precision: number;
+  };
 }
 
 export const getBalanceByIds = async (
@@ -29,9 +32,12 @@ export const getBalanceByIds = async (
     registrar: accounts[index].registrar
       ? accounts[index].registrar.name
       : null,
-    balance:
-      asset !== null
-        ? asset[1].amount.toNumber() / 10 ** asset[0].precision
-        : null,
+    balance: {
+      amount:
+        asset !== null
+          ? asset[1].amount.toNumber() / 10 ** asset[0].precision
+          : null,
+      precision: asset !== null ? asset[0].precision : null,
+    },
   }));
 };

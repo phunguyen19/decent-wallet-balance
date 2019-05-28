@@ -7,7 +7,7 @@ Simple command line program for getting the list of wallet balance filter by an 
 ```
 npm install
 npm run build
-npm run link
+npm link
 ```
 
 ## Usage

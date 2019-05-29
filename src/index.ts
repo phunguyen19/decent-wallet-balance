@@ -21,7 +21,7 @@ program
   )
   .option(
     '--limit-output [number]',
-    '(optional) Top list of accounts. E.g: 20',
+    '(optional) Limit the number account to output. E.g: 20',
     -1,
   )
   .option('--order [order]', '(optional) DESC | ASC', 'DESC')

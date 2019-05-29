@@ -13,7 +13,8 @@
     "start": "ts-node src/",
     "start:dist": "node dist/",
     "start:recursive": "ts-node src/recursiveGetAccount.ts",
-    "start:loop": "ts-node src/loopGetAccount.ts"
+    "start:loop": "ts-node src/loopGetAccount.ts",
+    "prepare": "npm run build"
   },
   "bin": {
     "decent-wallet-balance": "./dist/index.js"

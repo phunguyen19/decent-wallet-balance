@@ -25,8 +25,8 @@ program
     .option('--limit-output [number]', '(optional) Limit the number account to output. E.g: 20', -1)
     .option('--order [order]', '(optional) DESC | ASC', 'DESC')
     .option('--concurrent [number]', '(optional) Number of max concurrent requests to blockchain. E.g: 500', 1000)
-    .option('--websocket [uri]', '(optional) Websocket uri to blockchain. Default: wss://socket.decentgo.com:8090', 'wss://socket.decentgo.com:8090')
-    .version('0.1.0', '-v, --version')
+    .option('--websocket [uri]', '(optional) Websocket uri to blockchain.', 'wss://socket.decentgo.com:8090')
+    .version('0.1.2', '-v, --version')
     .parse(process.argv);
 let isError = false;
 if (!program.output) {

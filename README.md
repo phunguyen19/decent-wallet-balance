@@ -43,7 +43,7 @@ Options:
   --limit-output [number]  (optional) Limit the number account to output. E.g: 20 (default: -1)
   --order [order]          (optional) DESC | ASC (default: "DESC")
   --concurrent [number]    (optional) Number of max concurrent requests to blockchain. E.g: 500 (default: 1000)
-  --websocket [uri]        (optional) Websocket uri to blockchain. Default: wss://socket.decentgo.com:8090 (default: "wss://socket.decentgo.com:8090")
+  --websocket [uri]        (optional) Websocket uri to blockchain. (default: "wss://socket.decentgo.com:8090")
   -v, --version            output the version number
   -h, --help               output usage information
 ```

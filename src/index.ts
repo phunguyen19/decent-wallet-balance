@@ -32,10 +32,10 @@ program
   )
   .option(
     '--websocket [uri]',
-    '(optional) Websocket uri to blockchain. Default: wss://socket.decentgo.com:8090',
+    '(optional) Websocket uri to blockchain.',
     'wss://socket.decentgo.com:8090',
   )
-  .version('0.1.0', '-v, --version')
+  .version('0.1.2', '-v, --version')
   .parse(process.argv);
 
 let isError = false;

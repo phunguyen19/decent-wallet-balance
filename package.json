@@ -12,9 +12,8 @@
     "prebuild": "rimraf dist/",
     "start": "ts-node src/",
     "start:dist": "node dist/",
-    "start:recursive": "ts-node src/recursiveGetAccount.ts",
-    "start:loop": "ts-node src/loopGetAccount.ts",
-    "postinstall": "npm run build"
+    "preinstall": "npm install",
+    "install": "npm run build"
   },
   "bin": {
     "decent-wallet-balance": "./dist/index.js"

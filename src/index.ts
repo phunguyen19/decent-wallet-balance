@@ -14,26 +14,24 @@ import { AccountInfo, getBalanceByIds } from './utils/getBalanceByIds';
 import { logger } from './utils/logger';
 
 program
+  .option('--output <path>', '(required) Output csv file name. E.g result.csv')
   .option(
-    '-o, --output <string>',
-    '(required) Output csv file name. E.g result.csv',
-  )
-  .option(
-    '-a, --asset [string]',
+    '--asset [symbol]',
     '(required) Asset symbol to get the balance. E.g: ALX',
   )
   .option(
-    '-l, --limit-output [number]',
+    '--limit-output [number]',
     '(optional) Top list of accounts. E.g: 20',
     -1,
   )
+  .option('--order [order]', '(optional) DESC | ASC', 'DESC')
   .option(
-    '-c, --concurrent [number]',
+    '--concurrent [number]',
     '(optional) Number of max concurrent requests to blockchain. E.g: 500',
     1000,
   )
   .option(
-    '-w, --websocket [string]',
+    '--websocket [uri]',
     '(optional) Websocket uri to blockchain. Default: wss://socket.decentgo.com:8090',
     'wss://socket.decentgo.com:8090',
   )
@@ -58,6 +56,7 @@ if (isError) {
 
 const config = {
   assetSymbol: String(program.asset).toUpperCase(),
+  order: program.order,
   limitOutput: +program.limitOutput,
   blockchainSocketUrl: program.websocket,
   csvOutputFile: resolve(program.output),
@@ -105,9 +104,13 @@ const loopGetAccounts = async () => {
   fs.writeFileSync(config.csvOutputFile, 'id,name,registrar,balance,asset');
 
   totalList
-    .sort((prevEl, nextEl) => nextEl.balance.amount - prevEl.balance.amount)
+    .sort((prevEl, nextEl) =>
+      config.order === 'DESC'
+        ? nextEl.balance.amount - prevEl.balance.amount
+        : prevEl.balance.amount - nextEl.balance.amount,
+    )
     .some((account, index) => {
-      if (config.limitOutput > 0 && index > config.limitOutput) {
+      if (config.limitOutput > 0 && index + 1 > config.limitOutput) {
         return true;
       }
 

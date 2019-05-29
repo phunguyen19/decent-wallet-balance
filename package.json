@@ -1,6 +1,6 @@
 {
   "name": "decent-wallet-balance",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "",
   "main": "index.js",
   "scripts": {
@@ -12,8 +12,7 @@
     "start": "ts-node src/",
     "start:dist": "node dist/",
     "build": "tsc",
-    "prebuild": "npm run clean",
-    "prepare": "npm run build"
+    "prebuild": "npm run clean"
   },
   "bin": {
     "decent-wallet-balance": "./dist/index.js"

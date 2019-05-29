@@ -7,11 +7,14 @@ import * as program from 'commander';
 import { DCoreSdk } from 'dcorejs-sdk';
 import Decimal from 'decimal.js';
 import * as fs from 'fs';
-import { dirname, resolve } from 'path';
+import { dirname, resolve, join } from 'path';
 import * as WebSocket from 'ws';
 
 import { AccountInfo, getBalanceByIds } from './utils/getBalanceByIds';
 import { logger } from './utils/logger';
+
+// tslint:disable-next-line
+const packageJson: any = require('../package.json');
 
 program
   .option('--output <path>', '(required) Output csv file name. E.g result.csv')
@@ -35,7 +38,7 @@ program
     '(optional) Websocket uri to blockchain.',
     'wss://socket.decentgo.com:8090',
   )
-  .version('0.1.2', '-v, --version')
+  .version(packageJson.version, '-v, --version')
   .parse(process.argv);
 
 let isError = false;

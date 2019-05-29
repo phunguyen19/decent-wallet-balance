@@ -19,6 +19,7 @@ const path_1 = require("path");
 const WebSocket = require("ws");
 const getBalanceByIds_1 = require("./utils/getBalanceByIds");
 const logger_1 = require("./utils/logger");
+const packageJson = require('../package.json');
 program
     .option('--output <path>', '(required) Output csv file name. E.g result.csv')
     .option('--asset [symbol]', '(required) Asset symbol to get the balance. E.g: ALX')
@@ -26,7 +27,7 @@ program
     .option('--order [order]', '(optional) DESC | ASC', 'DESC')
     .option('--concurrent [number]', '(optional) Number of max concurrent requests to blockchain. E.g: 500', 1000)
     .option('--websocket [uri]', '(optional) Websocket uri to blockchain.', 'wss://socket.decentgo.com:8090')
-    .version('0.1.2', '-v, --version')
+    .version(packageJson.version, '-v, --version')
     .parse(process.argv);
 let isError = false;
 if (!program.output) {
